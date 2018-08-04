@@ -120,3 +120,27 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+
+resources:
+  Resources:
+    ExampleBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: dk-slstrial-example-bucket
+  Outputs:
+    BucketName:
+      Value:
+        "Ref": ExampleBucket
+      Description: Name of Example bucket
+    BucketDomain:
+      Value:
+#        Fn::GetAtt:
+#          - ExampleBucket
+#          - DomainName
+        Fn::Join:
+          - ''
+          - - 'https://'
+            - Fn::GetAtt:
+              - ExampleBucket
+              - DomainName
+      Description: URL of Example bucket
