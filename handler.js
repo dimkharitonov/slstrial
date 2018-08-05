@@ -1,12 +1,14 @@
 'use strict';
 
+const BusinessLogic = require('./business-logic');
+
 module.exports.hello = (event, context, callback) => {
+
+  var bl = new BusinessLogic(process.env.BUCKET_NAME);
+
   const response = {
     statusCode: 200,
-    body: JSON.stringify({
-      message: 'It was began!',
-      input: event,
-    }),
+    body: JSON.stringify(bl.hello(event)),
   };
 
   callback(null, response);

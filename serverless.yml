@@ -27,21 +27,29 @@ provider:
   memorySize: 128
   timeout: 3
 
+  custom:
+    bucketName: dk-${opt:domain, 'slstrial-example'}-${self:provider.stage}
+
   environment:
     SYSTEM_INFO: trial_function
+    BUCKET_NAME: ${self:provider.custom.bucketName}
+
 
   tags:
     Name: TrialFunction
-# you can overwrite defaults here
-#  stage: dev
-#  region: us-east-1
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+# IAM Role
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+      Resource:
+        Fn::Join:
+          - ""
+          - - "arn:aws:s3:::"
+            - Ref: ExampleBucket
+
+
 #    - Effect: "Allow"
 #      Action:
 #        - "s3:PutObject"
@@ -116,7 +124,7 @@ resources:
     ExampleBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: dk-${opt:domain, 'slstrial-example'}-${self:provider.stage}
+        BucketName: ${self:provider.custom.bucketName}
   Outputs:
     BucketName:
       Value:
