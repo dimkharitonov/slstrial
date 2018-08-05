@@ -109,24 +109,14 @@ functions:
 #    environment:
 #      variable2: value2
 
-# you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
-
+# CloudFormation resource templates
 resources:
   Resources:
+# S3 bucket
     ExampleBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: dk-slstrial-example-bucket
+        BucketName: dk-${opt:domain, 'slstrial-example'}-${self:provider.stage}
   Outputs:
     BucketName:
       Value:
@@ -134,9 +124,6 @@ resources:
       Description: Name of Example bucket
     BucketDomain:
       Value:
-#        Fn::GetAtt:
-#          - ExampleBucket
-#          - DomainName
         Fn::Join:
           - ''
           - - 'https://'
